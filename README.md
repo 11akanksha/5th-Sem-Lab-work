@@ -1,2 +1,2 @@
 # DAA-Lab
-All the question with solution for future reference
+All the questions with solution for future reference
