@@ -1,29 +1,25 @@
 #include <iostream>
 using namespace std;
 
-void swap_elements(int *a, int *c, int *b, int *d)
+void swap(int *x, int *y)
 {
-    int t = *a;
-    *a = *c;
-    *c = t;
-
-    t = *b;
-    *b = *d;
-    *d = t;
+    int t = *x;
+    *x = *y;
+    *y = t;
 }
 
-void sort_sr(int (*f)[2], int n)
+void sort(int *a, int n)
 {
-    //sorting of 2nd row in 2d array
-    for (int i = 0; i < n - 1; i++)
+    int i, j, min_idx;
+
+    for (i = 0; i < n - 1; i++)
     {
-        for (int j = 0; j < n - i - 1; j++)
-        {
-            if (f[j][1] < f[j + 1][1])
-            {
-                swap_elements(&f[j][0], &f[j + 1][0], &f[j][1], &f[j + 1][1]);
-            }
-        }
+        min_idx = i;
+        for (j = i + 1; j < n; j++)
+            if (a[j] < a[min_idx])
+                min_idx = j;
+
+        swap(&a[min_idx], &a[i]);
     }
 }
 
@@ -31,27 +27,14 @@ int main()
 {
     int n;
     cin >> n;
-    int e[100], f[100][2], b[101] = {0};
+    int *a = new int[n];
     for (int i = 0; i < n; i++)
     {
-        cin >> e[i];
-        b[e[i]]++;
+        cin >> a[i];
     }
-    int j = 0;
-    for (int i = 0; i < 101; i++)
-    {
-        if (b[i] > 0)
-        {
-            f[j][0] = i;
-            f[j][1] = b[i];
-            j++;
-        }
-    }
-    sort_sr(f, j);
-    for (int i = 0; i < j; i++)
-    {
-        cout << f[i][0] << " ";
-    }
-    cout << endl;
+    sort(a, n);
+    cout << "Second smallest:" << a[1] << endl;
+    cout << "Second largest:" << a[n - 2] << endl;
+    delete[] a;
     return 0;
 }

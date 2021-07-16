@@ -1,11 +1,11 @@
 #include <iostream>
 using namespace std;
 
-void swap_ele(int *a, int *b)
+void swap(int *x, int *y)
 {
-    int t = *a;
-    *a = *b;
-    *b = t;
+    int t = *x;
+    *x = *y;
+    *y = t;
 }
 
 int main()
@@ -17,14 +17,20 @@ int main()
     {
         cin >> a[i];
     }
-    //reverse the array
-    int i = 0, j = n - 1;
-    while (j > i)
+    int s = n;
+    if (n % 2 != 0)
     {
-        swap_ele(&a[i], &a[j]);
-        i++;
-        j--;
+        int s = n - 1;
     }
+    for (int i = 0; i < s / 2; i++)
+    {
+        swap(a[i], a[(s - 1) - i]);
+    }
+    for (int i = 0; i < s; i += 2)
+    {
+        swap(a[i], a[i + 1]);
+    }
+
     for (int i = 0; i < n; i++)
     {
         cout << a[i] << " ";
