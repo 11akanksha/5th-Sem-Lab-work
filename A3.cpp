@@ -1,43 +1,36 @@
 #include <iostream>
 using namespace std;
 
-void swap(int *x, int *y)
-{
-    int t = *x;
-    *x = *y;
-    *y = t;
-}
-
-void sort_arr(int *a, int n)
-{
-    int i, j, min_idx;
-
-    for (i = 0; i < n - 1; i++)
-    {
-        min_idx = i;
-        for (j = i + 1; j < n; j++)
-            if (a[j] < a[min_idx])
-                min_idx = j;
-
-        swap(&a[min_idx], &a[i]);
-    }
-}
-
 int main()
 {
-    int n, min_diff = INT_MAX;
+    int a[10][10];
+    int n;
     cin >> n;
-    int *a = new int[n];
     for (int i = 0; i < n; i++)
-        cin >> a[i];
-    sort_arr(a, n);
-    for (int i = 1; i < n; i++)
     {
-        int diff = a[i] - a[i - 1];
-        if (diff < min_diff)
-            min_diff = diff;
+        for (int j = 0; j < n; j++)
+        {
+            cin >> a[i][j];
+        }
     }
-    cout << min_diff;
-    delete[] a;
+
+    for (int k = 0; k < n; ++k)
+    {
+        int c1 = 0;
+        for (int i = 1; i < n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (a[0][k] == a[i][j])
+                {
+                    c1++;
+                    break;
+                }
+            }
+        }
+        if (c1 == n - 1)
+            cout << a[0][k] << " ";
+    }
+    cout << endl;
     return 0;
 }
