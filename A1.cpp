@@ -1,69 +1,40 @@
 #include <iostream>
 using namespace std;
 
-bool appr1(int *a, int n)
+void swap(int *x, int *y)
 {
-    int k;
-    for (int i = 0; i < n; i++)
-    {
-        k = 0;
-        for (int j = i; j < n; j++)
-        {
-            if (a[i] == a[j])
-            {
-                k++;
-            }
-        }
-        if (k > n / 2)
-        {
-            return true;
-        }
-    }
-    return false;
+    int t = *x;
+    *x = *y;
+    *y = t;
 }
 
-bool appr2(int *f, int n, int l)
+void sort(int *a, int n)
 {
-    for (int i = 0; i <= n; i++)
+    int i, j, min_idx;
+
+    for (i = 0; i < n - 1; i++)
     {
-        if (f[i] > l / 2)
-        {
-            return true;
-        }
+        min_idx = i;
+        for (j = i + 1; j < n; j++)
+            if (a[j] < a[min_idx])
+                min_idx = j;
+
+        swap(&a[min_idx], &a[i]);
     }
-    return false;
 }
 
 int main()
 {
-    int n, m = 0;
-    int freq[100] = {0};
-    int *a = new int[n];
+    int n;
     cin >> n;
-
+    int *a = new int[n];
     for (int i = 0; i < n; i++)
     {
         cin >> a[i];
-        freq[a[i]]++;
-        if (a[i] > m)
-            m = a[i];
     }
-    if (appr1(a, n))
-    {
-        cout << "Array has an element that repeats more than n/2 times\n";
-    }
-    else
-    {
-        cout << "There are no elements that occurs more then n/2 times\n";
-    }
-    if (appr2(freq, m, n))
-    {
-        cout << "Array has an element that repeats more than n/2 times\n";
-    }
-    else
-    {
-        cout << "There are no elements that occurs more then n/2 times\n";
-    }
-
+    sort(a, n);
+    cout << "Second smallest:" << a[1] << endl;
+    cout << "Second largest:" << a[n - 2] << endl;
+    delete[] a;
     return 0;
 }
