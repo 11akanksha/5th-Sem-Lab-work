@@ -1,35 +1,32 @@
 #include <iostream>
+#define max 100
 using namespace std;
 
 int main()
 {
-    int a[10][10];
-    int n;
+    int n, t1, t2, n1;
+    int a[max];
     cin >> n;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; ++i)
+        cin >> a[i];
+    if (n % 2 != 0)
+        n1 = n - 1;
+    else
+        n1 = n;
+    int k = n1;
+    for (int i = 0; i < n1 / 2 - 1; i = i + 2)
     {
-        for (int j = 0; j < n; j++)
-        {
-            cin >> a[i][j];
-        }
+        t1 = a[i];
+        t2 = a[i + 1];
+        a[i] = a[k - 2];
+        a[k - 2] = t1;
+        a[i + 1] = a[k - 1];
+        a[k - 1] = t2;
+        k = k - 2;
     }
-
-    for (int k = 0; k < n; ++k)
+    for (int i = 0; i < n; ++i)
     {
-        int c1 = 0;
-        for (int i = 1; i < n; ++i)
-        {
-            for (int j = 0; j < n; ++j)
-            {
-                if (a[0][k] == a[i][j])
-                {
-                    c1++;
-                    break;
-                }
-            }
-        }
-        if (c1 == n - 1)
-            cout << a[0][k] << " ";
+        cout << a[i] << " ";
     }
     cout << endl;
     return 0;
