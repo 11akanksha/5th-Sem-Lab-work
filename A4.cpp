@@ -1,76 +1,104 @@
 #include <iostream>
 using namespace std;
 
-int non_zero(int a[4][4])
+int s[100], t;
+bool d[1000] = {false};
+
+//sorting function helper:
+void swap_ele(int *a, int *b)
 {
-    int s = 16;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (a[i][j] == 0)
-            {
-                s--;
-            }
-        }
-    }
-    return s;
+    int t = *a;
+    *a = *b;
+    *b = t;
 }
 
-int sum_above_diag(int a[4][4])
+//sorting function
+void sort_arr(int *a, int l)
 {
-    int sum = 0;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < l - 1; i++)
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < l - i - 1; j++)
         {
-            if (j > i)
+            if (a[j] > a[j + 1])
             {
-                sum += a[i][j];
+                swap_ele(&a[j], &a[j + 1]);
             }
         }
     }
-    return sum;
 }
 
-int sum_below_diag(int a[4][4])
+void insert1(int x)
 {
-    int sum = 0;
-    for (int i = 0; i < 4; i++)
+    int k = 0;
+
+    for (int i = 0; i < t; i++)
     {
-        for (int j = 0; j < 4; j++)
+        if (x != s[i])
         {
-            if (i > j)
-            {
-                sum += a[i][j];
-            }
+            k++;
         }
     }
-    return sum;
+    if (k == t)
+    {
+        s[t] = x;
+        t++;
+    }
+    //takes O(n) time
 }
 
-int prod_diag(int a[4][4])
+void display()
 {
-    int p = 1;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < t; i++)
     {
-        for (int j = 0; j < 4; j++)
-        {
-            if (i == j)
-            {
-                p *= a[i][j];
-            }
-        }
+        cout << s[i] << " ";
     }
-    return p;
+    cout << endl;
+}
+
+void removeBottomHalf()
+{
+    sort_arr(s, t);
+    for (int i = t - 1; i >= t / 2; i--)
+    {
+        s[i] = 0;
+    }
+    t = t / 2;
+    //already takes O(n) time
+}
+
+void insert2(int x)
+{
+    if (d[x] == false)
+    {
+        s[t] = x;
+        d[x] = true;
+        t++;
+    }
+    //takes O(1) time
 }
 
 int main()
 {
-    int a[4][4] = {{1, 2, 3, 4}, {5, 6, 0, 8}, {0, 10, 11, 12}, {13, 0, 15, 16}};
-    cout << "Non zero: " << non_zero(a) << endl;
-    cout << "sum above diagonal: " << sum_above_diag(a) << endl;
-    cout << "sum below diagonal: " << sum_below_diag(a) << endl;
-    cout << "product of diagonal: " << prod_diag(a) << endl;
+    int n;
+    cin >> n;
+    int *a = new int[n];
+    t = 0;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+        insert1(a[i]);
+    }
+    display();
+    removeBottomHalf();
+    display();
+    t = 0;
+    for (int i = 0; i < n; i++)
+    {
+        insert2(a[i]);
+    }
+    display();
+    removeBottomHalf();
+    display();
+    delete[] a;
     return 0;
 }
