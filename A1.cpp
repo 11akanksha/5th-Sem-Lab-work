@@ -1,17 +1,25 @@
 #include <iostream>
 using namespace std;
 
+void solve(int n)
+{
+    if (n == 1)
+    {
+        cout << n << endl;
+        return;
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+    solve(n - 1);
+}
+
 int main()
 {
-    int n, ans = 0;
+    int n;
     cin >> n;
-    int *a = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-        ans = ans ^ a[i];
-    }
-    cout << ans;
-    delete[] a;
+    solve(n);
     return 0;
 }
