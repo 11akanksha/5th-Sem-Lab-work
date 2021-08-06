@@ -1,43 +1,39 @@
 #include <iostream>
 using namespace std;
 
-void swap(int *x, int *y)
+int BS(int *a, int l, int r, int k)
 {
-    int t = *x;
-    *x = *y;
-    *y = t;
-}
-
-void sort_arr(int *a, int n)
-{
-    int i, j, min_idx;
-
-    for (i = 0; i < n - 1; i++)
+    if (r >= l)
     {
-        min_idx = i;
-        for (j = i + 1; j < n; j++)
-            if (a[j] < a[min_idx])
-                min_idx = j;
+        int mid = l + (r - l) / 2;
 
-        swap(&a[min_idx], &a[i]);
+        if (a[mid] == k)
+            return mid;
+
+        if (a[mid] > k)
+            return BS(a, l, mid - 1, k);
+
+        return BS(a, mid + 1, r, k);
     }
+    return -1;
 }
 
 int main()
 {
-    int n, min_diff = INT_MAX;
+    int n, k;
+    cout << "No of elements: ";
     cin >> n;
+    cout << "Fill the array: " << endl;
     int *a = new int[n];
     for (int i = 0; i < n; i++)
-        cin >> a[i];
-    sort_arr(a, n);
-    for (int i = 1; i < n; i++)
     {
-        int diff = a[i] - a[i - 1];
-        if (diff < min_diff)
-            min_diff = diff;
+        cin >> a[i];
     }
-    cout << min_diff;
+    cout << "Enter the element you want to search for:" << endl;
+    cin >> k;
+    int s = 0, e = n - 1;
+    int res = BS(a, s, e, k);
+    (res == -1) ? cout << "Element is not present in array" : cout << "Element is present at index " << res;
     delete[] a;
     return 0;
 }
