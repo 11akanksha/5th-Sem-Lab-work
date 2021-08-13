@@ -1,63 +1,25 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-void swap(int *xp, int *yp)
+//tc=O(logn)
+long power(int a, int n)
 {
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
+    if (n == 0)
+        return 1;
+
+    if (a == 0)
+        return 0;
+    if (n % 2 == 0)
+        return power(a * a, n / 2);
+    else
+        return a * power(a * a, n / 2);
 }
-
-void BubbleSort(int arr[], int n)
-{
-    int i, j;
-    for (i = 0; i < n - 1; i++)
-    {
-        for (j = 0; j < n - i - 1; j++)
-        {
-            if (arr[j] > arr[j + 1])
-                swap(&arr[j], &arr[j + 1]);
-        }
-    }
-}
-
-void insertionSort(int arr[], int n)
-{
-    int i, key, j;
-    for (i = 1; i < n; i++)
-    {
-        key = arr[i];
-        j = i - 1;
-
-        while (j >= 0 && arr[j] > key)
-        {
-            arr[j + 1] = arr[j];
-            j = j - 1;
-        }
-        arr[j + 1] = key;
-    }
-}
-
 int main()
 {
-    int n, k;
-    cout << "No of elements: ";
-    cin >> n;
-    cout << "Fill the array: " << endl;
-    int *a = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-    }
-    BubbleSort(a, n);
-    cout << "Using Bubble sort: \n";
-    for (int i = 0; i < n; i++)
-        cout << a[i] << " ";
-    cout << endl;
-    insertionSort(a, n);
-    cout << "Using Insertion sort: \n";
-    for (int i = 0; i < n; i++)
-        cout << a[i] << " ";
-    cout << endl;
+    int x, y;
+    cout << "Enter 2 numbers : " << endl;
+    cin >> x >> y;
+
+    cout << power(x, y);
     return 0;
 }
