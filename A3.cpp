@@ -1,39 +1,77 @@
 #include <iostream>
+#include <climits>
 using namespace std;
 
-int BS(int *a, int l, int r, int k)
+void findMinAndMax(int arr[], int low, int high, int &min, int &max)
 {
-    if (r >= l)
+
+    if (low == high)
     {
-        int mid = l + (r - l) / 2;
+        if (max < arr[low])
+        {
+            max = arr[low];
+        }
 
-        if (a[mid] == k)
-            return mid;
+        if (min > arr[high])
+        {
+            min = arr[high];
+        }
 
-        if (a[mid] > k)
-            return BS(a, l, mid - 1, k);
-
-        return BS(a, mid + 1, r, k);
+        return;
     }
-    return -1;
+
+    if (high - low == 1)
+    {
+        if (arr[low] < arr[high])
+        {
+            if (min > arr[low])
+            {
+                min = arr[low];
+            }
+
+            if (max < arr[high])
+            {
+                max = arr[high];
+            }
+        }
+        else
+        {
+            if (min > arr[high])
+            {
+                min = arr[high];
+            }
+
+            if (max < arr[low])
+            {
+                max = arr[low];
+            }
+        }
+        return;
+    }
+
+    int mid = (low + high) / 2;
+
+    findMinAndMax(arr, low, mid, min, max);
+
+    findMinAndMax(arr, mid + 1, high, min, max);
 }
 
 int main()
 {
-    int n, k;
-    cout << "No of elements: ";
+    int n;
+    cout << "No of elements : " << endl;
     cin >> n;
-    cout << "Fill the array: " << endl;
-    int *a = new int[n];
+    int *arr = new int(n);
     for (int i = 0; i < n; i++)
     {
-        cin >> a[i];
+        cin >> arr[i];
     }
-    cout << "Enter the element you want to search for:" << endl;
-    cin >> k;
-    int s = 0, e = n - 1;
-    int res = BS(a, s, e, k);
-    (res == -1) ? cout << "Element is not present in array" : cout << "Element is present at index " << res;
-    delete[] a;
+
+    int max = INT_MIN, min = INT_MAX;
+
+    findMinAndMax(arr, 0, n - 1, min, max);
+
+    cout << "Max : " << max << "\t Min: " << min << endl;
+    delete[] arr;
     return 0;
 }
