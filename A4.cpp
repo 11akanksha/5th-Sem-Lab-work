@@ -1,40 +1,21 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-int binarySearch(int arr[], int l, int r, int x)
+//TC=O(N)
+long power(int a, int n)
 {
-    while (l <= r)
-    {
-        int m = l + (r - l) / 2;
-
-        if (arr[m] == x)
-            return m;
-
-        if (arr[m] < x)
-            l = m + 1;
-
-        else
-            r = m - 1;
-    }
-
-    return -1;
+    if (n == 0)
+        return 1;
+    else
+        return a * power(a, n - 1);
 }
 
-int main(void)
+int main()
 {
-    int n, k;
-    cout << "No of elements: ";
-    cin >> n;
-    cout << "Fill the array: " << endl;
-    int *a = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-    }
-    cout << "Enter the element you want to search for:" << endl;
-    cin >> k;
-    int result = binarySearch(a, 0, n - 1, k);
-    (result == -1) ? cout << "Element is not present in array" : cout << "Element is present at index " << result;
-    delete[] a;
+    int x;
+    unsigned int y;
+    cout << "Enter 2 numbers : " << endl;
+    cin >> x >> y;
+    cout << power(x, y);
     return 0;
 }
