@@ -1,3 +1,5 @@
+//Note: Heapify is a way of creating heaps faster. The usual build heap method takes O(NlogN) time.
+//While,Heapifiy takes O(N) time!
 #include <iostream>
 using namespace std;
 
