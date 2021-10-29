@@ -1,105 +1,100 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 using namespace std;
 
-//Priority Queue
-//Priority : Smaller the no,higher the priority
-//Hence we'll use min heap.
-int n;
-void build_min_heap(int *a, int i)
+#define edge pair<int, int>
+
+class Graph
 {
+private:
+    vector<pair<int, edge>> G;
+    vector<pair<int, edge>> T;
+    int *parent;
+    int V;
 
-    int p = (i - 1) / 2;
+public:
+    Graph(int V);
+    void AddWeightedEdge(int u, int v, int w);
+    int find_set(int i);
+    void union_set(int u, int v);
+    void kruskal();
+    void print();
+};
+Graph::Graph(int V)
+{
+    parent = new int[V];
 
-    if (p >= 0 && a[i] < a[p])
-    {
-        int t = a[p];
-        a[p] = a[i];
-        a[i] = t;
-        build_min_heap(a, (i - 1) / 2);
-    }
+    for (int i = 0; i < V; i++)
+        parent[i] = i;
+
+    G.clear();
+    T.clear();
+}
+void Graph::AddWeightedEdge(int u, int v, int w)
+{
+    G.push_back(make_pair(w, edge(u, v)));
+}
+int Graph::find_set(int i)
+{
+    if (i == parent[i])
+        return i;
+    else
+        return find_set(parent[i]);
 }
 
-void Build_Q(int *a)
+void Graph::union_set(int u, int v)
 {
-    for (int i = n - 1; i >= 0; i--)
-    {
-        build_min_heap(a, i);
-    }
+    parent[u] = parent[v];
 }
-
-void min_heapify(int *a, int i)
+void Graph::kruskal()
 {
-    int l = 2 * i + 1;
-    int r = 2 * i + 2;
-    int mini = i;
-    if (l < n && a[l] < a[mini])
+    int i, uRep, vRep;
+    sort(G.begin(), G.end());
+    for (i = 0; i < G.size(); i++)
     {
-        mini = l;
-    }
-    if (r < n && a[r] < a[mini])
-    {
-        mini = r;
-    }
-    if (mini != i)
-    {
-        int temp = a[mini];
-        a[mini] = a[i];
-        a[i] = temp;
-        min_heapify(a, mini);
-    }
-}
-
-void deQ(int *a)
-{
-    cout << "Element dequeued : " << a[0] << endl;
-    a[0] = a[n - 1];
-    n--;
-    int mini = 0;
-    if (a[mini] > a[1])
-    {
-        mini = 1;
-    }
-    if (a[mini] > a[2])
-    {
-        mini = 2;
-    }
-    if (mini != 0)
-    {
-        for (int i = 0; i < n; i++)
+        uRep = find_set(G[i].second.first);
+        vRep = find_set(G[i].second.second);
+        if (uRep != vRep)
         {
-            min_heapify(a, i);
+            T.push_back(G[i]);
+            union_set(uRep, vRep);
         }
     }
 }
-
+void Graph::print()
+{
+    cout << "Edge :"
+         << " Weight" << endl;
+    int sum = 0;
+    for (int i = 0; i < T.size(); i++)
+    {
+        cout << T[i].second.first << " - " << T[i].second.second << " : "
+             << T[i].first;
+        sum += T[i].first;
+        cout << endl;
+    }
+    cout << "Min cost : " << sum << endl;
+}
 int main()
 {
-    cout << "----Min priority Queue----\n";
-    int *a = new int[20];
-    cout << "Enter size of array: ";
-    cin >> n;
-    cout << "Enter the elements:\n";
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-    }
-    Build_Q(a);
-    cout << "Enqueued all the elements.\nPriority queue is ready!\n\n";
-    bool to_deQ;
-    cout << "Want to dequeue?\n";
-    cout << "Enter 1 for yes and 0 otherwise\n";
-    cin >> to_deQ;
-    while (to_deQ)
-    {
-        if (n == 0)
-        {
-            cout << "Queue is empty.\n";
-            break;
-        }
-        deQ(a);
-        cout << "Want to dequeue again?\n(1 : Yes,0 : No)\n";
-        cin >> to_deQ;
-    }
-    delete[] a;
+    Graph g(6);
+    g.AddWeightedEdge(0, 1, 4);
+    g.AddWeightedEdge(0, 2, 4);
+    g.AddWeightedEdge(1, 2, 2);
+    g.AddWeightedEdge(1, 0, 4);
+    g.AddWeightedEdge(2, 0, 4);
+    g.AddWeightedEdge(2, 1, 2);
+    g.AddWeightedEdge(2, 3, 3);
+    g.AddWeightedEdge(2, 5, 2);
+    g.AddWeightedEdge(2, 4, 4);
+    g.AddWeightedEdge(3, 2, 3);
+    g.AddWeightedEdge(3, 4, 3);
+    g.AddWeightedEdge(4, 2, 4);
+    g.AddWeightedEdge(4, 3, 3);
+    g.AddWeightedEdge(5, 2, 2);
+    g.AddWeightedEdge(5, 4, 3);
+    g.kruskal();
+    g.print();
     return 0;
 }
