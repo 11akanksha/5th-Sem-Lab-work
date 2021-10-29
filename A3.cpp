@@ -1,94 +1,65 @@
 #include <iostream>
-#include <string.h>
+#include <vector>
 using namespace std;
 
-void build_max_heap(int *a, int i, int s)
+bool detectCycle(vector<int> *aL, int v, bool vis[], int p)
 {
-    int p = (i - 1) / 2;
-
-    if (p >= 0 && a[i] > a[p])
+    vis[v] = true;
+    for (int i = 0; i < aL[v].size(); i++)
     {
-        int t = a[p];
-        a[p] = a[i];
-        a[i] = t;
-        build_max_heap(a, (i - 1) / 2, s);
-    }
-}
-
-void build_min_heap(int *a, int i, int s)
-{
-
-    int p = (i - 1) / 2;
-
-    if (p >= 0 && a[i] < a[p])
-    {
-        int t = a[p];
-        a[p] = a[i];
-        a[i] = t;
-        build_min_heap(a, (i - 1) / 2, s);
-    }
-}
-
-string MaxMin(int *h, int n)
-{
-    string s = "MIN";
-    if (h[0] > h[1] && h[0] > h[2])
-    {
-        s = "MAX"; //heap was a max heap
-        for (int i = 0; i < n; i++)
+        if (!vis[i])
         {
-            build_min_heap(h, i, n);
+            if (detectCycle(aL, i, vis, v))
+                return true;
         }
+        else if (i != p)
+            return true;
     }
-    return s;
+    return false;
 }
 
-string MinMax(int *h, int n)
+bool hasCycle(vector<int> *aL, int n)
 {
-    string s = "MAX";
-    if (h[0] < h[1] && h[0] < h[2])
-    {
-        s = "MIN"; //heap was a min heap
-        for (int i = 0; i < n; i++)
-        {
-            build_max_heap(h, i, n);
-        }
-    }
-    return s;
-}
+    bool *vis = new bool[n];
+    for (int i = 0; i < n; i++)
+        vis[i] = false;
 
-void print_arr(int *a, int n)
-{
-    cout << "The array is : " << endl;
     for (int i = 0; i < n; i++)
     {
-        cout << a[i] << " ";
+        if (!vis[i])
+            if (detectCycle(aL, i, vis, -1))
+                return true;
     }
-    cout << endl;
+    return false;
+}
+
+void addEdge(vector<int> *aL, int u, int v)
+{
+    aL[u].push_back(v);
+    aL[v].push_back(u);
 }
 
 int main()
 {
-    int *a = new int[20];
-    int n;
-    cout << "Enter size of heap: ";
-    cin >> n;
-    cout << "Enter elements:\n";
+    int n = 5;
+    vector<int> adjL[n];
+    addEdge(adjL, 0, 1);
+    addEdge(adjL, 0, 2);
+    addEdge(adjL, 1, 4);
+    addEdge(adjL, 2, 4);
+    addEdge(adjL, 2, 3);
+
+    cout << "Adjacency list:" << endl;
     for (int i = 0; i < n; i++)
     {
-        cin >> a[i];
+        cout << i;
+        for (auto x : adjL[i])
+            cout << " -> " << x;
+        cout << endl;
     }
-    if (MaxMin(a, n) == "MAX")
-    {
-        cout << "Your heap was a max heap.Its now converted to min heap:\n";
-        print_arr(a, n);
-    }
-    else
-    {
-        MinMax(a, n);
-        cout << "Your heap was a min heap.Its now converted to max heap:\n";
-        print_arr(a, n);
-    }
-    delete[] a;
+    cout << endl;
+
+    hasCycle(adjL, n) ? cout << "The graph has a cycle\n" : cout << "The graph has no cycles\n";
+
     return 0;
 }
