@@ -1,64 +1,39 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 using namespace std;
 
-class Objects
+void addEdge(vector<int> *aL, int u, int v)
 {
-public:
-    int wt, p;
-    Objects() {}
-    Objects(int weight, int profit)
-    {
-        wt = weight;
-        p = profit;
-    }
-};
-
-bool cmp(Objects o1, Objects o2)
-{
-    double ratio1 = (double)o1.p / (double)o1.wt;
-    double ratio2 = (double)o2.p / (double)o2.wt;
-    return ratio1 > ratio2;
-}
-
-double Fractional_Knapsack(int m, Objects obj[], int n)
-{
-    sort(obj, obj + n, cmp);
-    int current_wt = 0;
-    double total_profit = 0.0;
-    for (int i = 0; i < n; i++)
-    {
-        if (current_wt + obj[i].wt <= m)
-        {
-            current_wt += obj[i].wt;
-            total_profit += obj[i].p;
-        }
-        else
-        {
-            int r = m - current_wt;
-            total_profit += obj[i].p * ((double)r / (double)obj[i].wt);
-            break;
-        }
-    }
-    return total_profit;
+    aL[u].push_back(v);
+    aL[v].push_back(u);
 }
 
 int main()
 {
-    int m, n;
-    cout << "Enter max size of Knapsack: ";
-    cin >> m;
-    cout << "Enter no of objects: ";
+    int n;
+    cout << "Enter the no of nodes of the graph:\n";
     cin >> n;
-    Objects *o = new Objects[n];
-    cout << "Enter weights and profit for each object:" << endl;
+    vector<int> adjL[n];
+    cout << "Enter the edges:" << endl;
+    int a, b;
+    bool add_more = true;
+
+    do
+    {
+        cin >> a >> b;
+        addEdge(adjL, a, b);
+
+        cout << "Continue?\t";
+        cin >> add_more;
+    } while (add_more);
+
+    cout << "Adjacency list:" << endl;
     for (int i = 0; i < n; i++)
     {
-        int w, pr;
-        cin >> w >> pr;
-        o[i] = Objects(w, pr);
+        cout << i;
+        for (auto x : adjL[i])
+            cout << " -> " << x;
+        cout << endl;
     }
-    cout << "Maximum Profit: " << Fractional_Knapsack(m, o, n);
-    delete[] o;
     return 0;
 }
